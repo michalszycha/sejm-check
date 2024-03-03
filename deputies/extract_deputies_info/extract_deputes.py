@@ -1,3 +1,4 @@
+import pandas as pd
 import requests
 import re
 from bs4 import BeautifulSoup
@@ -24,8 +25,14 @@ def get_deputies_list():
     return deputies_list
 
 
-def get_deputy_personal_info(deputy_id: str):
+def update_deputies_list(deputies):
+    for deputy in deputies:
+        print(f"update {deputy['id']}")
+        deputy.update(get_deputy_personal_info(deputy['id']))
+    return deputies
 
+
+def get_deputy_personal_info(deputy_id: str):
     info_list = ['lista', 'okreg', 'glosy', 'klub', 'urodzony', 'wyksztalcenie', 'szkola', 'zawod']
 
     url = f"https://www.sejm.gov.pl/sejm10.nsf/posel.xsp?id={deputy_id}&type=A"
@@ -41,10 +48,14 @@ def get_deputy_personal_info(deputy_id: str):
 
 
 def get_info(soup: BeautifulSoup, info: str):
-    return soup.find('p', id=re.compile(info, re.IGNORECASE)).parent.find('p', {'class': 'right'}).get_text()
+    try:
+        return soup.find('p', id=re.compile(info, re.IGNORECASE)).parent.find('p', {'class': 'right'}).get_text()
+    except AttributeError:
+        return None
 
 
-x = get_deputies_list()
-y = get_deputy_personal_info(x[0]['id'])
-print(x[0])
-print(y)
+def save_deputies_to_csv(path):
+    deputies = get_deputies_list()
+    deputies = update_deputies_list(deputies)
+    deputies_df = pd.DataFrame(deputies)
+    deputies_df.to_csv(path, sep=',')
