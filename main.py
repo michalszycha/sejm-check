@@ -1,6 +1,6 @@
 import logging
 import os
-from deputies.extract_deputies_info.extract_deputes import save_deputies_to_csv
+import deputies.extract_deputies_info.extract_deputies as dp
 
 log_path = "./logs"
 log_file = "app.log"
@@ -21,7 +21,8 @@ def setup_logging():
 
 def main():
     setup_logging()
-    save_deputies_to_csv('deputies.csv')
+    x = dp.DeputiesExtractor()
+    x.get_deputies_as_df("deputies.csv")
 
 
 if __name__ == "__main__":
