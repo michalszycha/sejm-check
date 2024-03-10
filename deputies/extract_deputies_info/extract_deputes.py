@@ -1,7 +1,10 @@
 import pandas as pd
 import requests
 import re
+import logging
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger(__name__)
 
 
 def get_deputies_list():
@@ -14,21 +17,25 @@ def get_deputies_list():
 
     deputies_raw = soup.find_all('a', id=re.compile("Poslowie"))
     for deputy in deputies_raw:
+        deputy_id = re.search("id=(\d{3})", deputy.get('href')).group(1)
+        deputy_name = deputy.get_text().split()[1]
+        deputy_lastname = deputy.get_text().split()[0]
         deputies_list.append(
             {
-                'id': re.search("id=(\d{3})", deputy.get('href')).group(1),
-                'imie': deputy.get_text().split()[1],
-                'nazwisko': deputy.get_text().split()[0]
+                'id': deputy_id,
+                'imie': deputy_name,
+                'nazwisko': deputy_lastname,
             }
         )
+        logger.info(f"Found deputy {deputy_name} {deputy_lastname} with id {deputy_id}")
 
     return deputies_list
 
 
 def update_deputies_list(deputies):
     for deputy in deputies:
-        print(f"update {deputy['id']}")
         deputy.update(get_deputy_personal_info(deputy['id']))
+        logger.info(f"Updated {deputy['imie']} {deputy['nazwisko']}")
     return deputies
 
 
