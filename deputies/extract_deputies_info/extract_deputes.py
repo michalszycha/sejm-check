@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_deputies_list():
+    logger.info("Deputies extraction starts.\n")
     url = "https://www.sejm.gov.pl/sejm10.nsf/poslowie.xsp?type=A"
     r = requests.get(url)
 
@@ -28,14 +29,16 @@ def get_deputies_list():
             }
         )
         logger.info(f"Found deputy {deputy_name} {deputy_lastname} with id {deputy_id}")
-
+    logger.info("Deputies extraction ends.\n")
     return deputies_list
 
 
 def update_deputies_list(deputies):
+    logger.info("Deputies info update starts.\n")
     for deputy in deputies:
         deputy.update(get_deputy_personal_info(deputy['id']))
         logger.info(f"Updated {deputy['imie']} {deputy['nazwisko']}")
+    logger.info("Deputies info update ends.\n")
     return deputies
 
 
