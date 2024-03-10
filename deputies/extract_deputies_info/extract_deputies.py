@@ -63,7 +63,7 @@ class DeputiesExtractor:
 
         return personal_info
 
-    def get_deputies_as_df(self, path: str, save_to_file: bool = True):
+    def get_deputies_as_df(self, path: str = "", save_to_file: bool = False):
         deputies = self.__get_deputies_list()
         deputies = self.__update_deputies_list(deputies)
         deputies_df = pd.DataFrame(deputies)

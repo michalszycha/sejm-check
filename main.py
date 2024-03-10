@@ -1,6 +1,7 @@
 import logging
 import os
-import deputies.extract_deputies_info.extract_deputies as dp
+import deputies.extract_deputies_info.extract_deputies as dp_extract
+import deputies.transform_deputies_info.transform_deputies as dp_transform
 
 log_path = "./logs"
 log_file = "app.log"
@@ -21,8 +22,11 @@ def setup_logging():
 
 def main():
     setup_logging()
-    x = dp.DeputiesExtractor()
-    x.get_deputies_as_df("deputies.csv")
+    extractor = dp_extract.DeputiesExtractor()
+    transformer = dp_transform.DeputiesTransformer()
+    deputies = extractor.get_deputies_as_df("deputies.csv", True)
+    transformer.transform_deputies(deputies, "transformed_deputies.csv", True)
+    
 
 
 if __name__ == "__main__":
