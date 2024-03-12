@@ -1,9 +1,7 @@
-name: CI
+name: ETL deputies info
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build:
