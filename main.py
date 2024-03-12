@@ -24,8 +24,8 @@ def main():
     setup_logging()
     extractor = dp_extract.DeputiesExtractor()
     transformer = dp_transform.DeputiesTransformer()
-    deputies = extractor.get_deputies_as_df("deputies.csv", True)
-    transformer.transform_deputies(deputies, "transformed_deputies.csv", True)
+    deputies = extractor.get_deputies_as_df(True)
+    transformer.transform_deputies(deputies, True)
     
 
 
