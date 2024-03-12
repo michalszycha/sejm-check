@@ -25,8 +25,8 @@ def main():
     setup_logging()
     extractor = dp_extract.DeputiesExtractor()
     transformer = dp_transform.DeputiesTransformer()
-    deputies = extractor.get_deputies_as_df(True)
-    deputies = transformer.transform_deputies(deputies, True)
+    deputies = extractor.get_deputies_as_df()
+    deputies = transformer.transform_deputies(deputies, )
     dp_load.DeputiesLoader.load_deputies(deputies)
 
 
