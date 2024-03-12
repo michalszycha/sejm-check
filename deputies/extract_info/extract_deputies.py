@@ -41,15 +41,17 @@ class DeputiesExtractor:
         except AttributeError:
             return None
 
-    def __update_deputies_list(self, deputies):
+    @staticmethod
+    def __update_deputies_list(deputies):
         logger.info("Deputies info update starts.\n")
         for deputy in deputies:
-            deputy.update(self.__get_deputy_personal_info(deputy['id']))
+            deputy.update(DeputiesExtractor.__get_deputy_personal_info(deputy['id']))
             logger.info(f"Updated {deputy['imie']} {deputy['nazwisko']}")
         logger.info("Deputies info update ends.\n")
         return deputies
 
-    def __get_deputy_personal_info(self, deputy_id: str):
+    @staticmethod
+    def __get_deputy_personal_info(deputy_id: str):
         info_list = ['lista', 'okreg', 'glosy', 'klub', 'urodzony', 'wyksztalcenie', 'szkola', 'zawod']
 
         url = f"https://www.sejm.gov.pl/sejm10.nsf/posel.xsp?id={deputy_id}&type=A"
@@ -59,13 +61,14 @@ class DeputiesExtractor:
         personal_info = dict()
 
         for info in info_list:
-            personal_info[info] = self.__get_info(soup, info)
+            personal_info[info] = DeputiesExtractor.__get_info(soup, info)
 
         return personal_info
 
-    def get_deputies_as_df(self, save_to_file: bool = False):
-        deputies = self.__get_deputies_list()
-        deputies = self.__update_deputies_list(deputies)
+    @staticmethod
+    def get_deputies(save_to_file: bool = False):
+        deputies = DeputiesExtractor.__get_deputies_list()
+        deputies = DeputiesExtractor.__update_deputies_list(deputies)
         deputies_df = pd.DataFrame(deputies)
         if save_to_file:
             deputies_df.to_csv("deputies.csv", sep=',')
