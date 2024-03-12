@@ -22,9 +22,10 @@ class DeputiesTransformer:
         deputies = deputies.drop('okreg', axis=1)
         return deputies
 
-    def transform_deputies(self, deputies: pd.DataFrame, save_to_file: bool = False):
-        deputies = self.__transform_date(deputies)
-        deputies = self.__transform_district(deputies)
+    @staticmethod
+    def transform_deputies(deputies: pd.DataFrame, save_to_file: bool = False):
+        deputies = DeputiesTransformer.__transform_date(deputies)
+        deputies = DeputiesTransformer.__transform_district(deputies)
         if save_to_file:
             deputies.to_csv("transformed_deputies.csv", sep=',')
         return deputies

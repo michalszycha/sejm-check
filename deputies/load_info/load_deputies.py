@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, inspect
 
 logger = logging.getLogger(__name__)
 
+
 class DeputiesLoader:
     @staticmethod
     def load_deputies(deputies: pd.DataFrame):
